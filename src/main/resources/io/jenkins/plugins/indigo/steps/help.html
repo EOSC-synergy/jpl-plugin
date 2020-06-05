@@ -1,0 +1,24 @@
+<p>
+    Validate the YAML configuration file for SQA defined Schema. It uses <a href="https://bitbucket.org/asomov/snakeyaml" target="_blank">SnakeYAML</a> as YAML processor from Jackson package.
+</p>
+<strong>Fields:</strong>
+<ul>
+    <li>
+        <code>yml</code>: Mandatory YAML configuration .
+    </li>
+    <li>
+        <code>schema</code>: A Mandatory Object containing the data to be serialized.
+    </li>
+</ul>
+<p>
+    <strong>Examples:</strong><br/>
+    <p>In the following code 'config.yml' and 'schema.json' represents the content of both files converted to String.</p><br/>
+    <code>
+        <pre>
+        def invalidMessages = indigoValidator yml: 'config.yml', schema: 'schema.json'
+        if (invalidMessages) {
+            error(invalidMessages.join('\n'))
+        }
+        </pre>
+    </code>
+</p>
