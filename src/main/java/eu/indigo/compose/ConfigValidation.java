@@ -1,5 +1,8 @@
 package eu.indigo.compose.parser;
 
+import java.io.Serializable;
+import java.util.Set;
+
 import org.jenkinsci.plugins.workflow.steps.Step;
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -11,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
@@ -21,13 +25,13 @@ import com.networknt.schema.JsonSchema;
  * @see: https://docs.docker.com/compose/compose-file/
  */
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
-class ConfigValidation implements Serializable {
+public class ConfigValidation implements Serializable {
 
     private static final long serialVersionUID = 0L;
 
     public ConfigValidation() {}
 
-    Set validate(String yml, String schema) {
+    public Set validate(String yml, String schema) throws JsonProcessingException {
 
         ObjectMapper objMapper = new ObjectMapper(new YAMLFactory());
 
@@ -36,8 +40,7 @@ class ConfigValidation implements Serializable {
                 .objectMapper(objMapper).build();
 
         Set invalidMessages = factory.getSchema(schema)
-                .validate(objMapper.readTree(yml))
-                .message;
+                .validate(objMapper.readTree(yml));
         return invalidMessages;
     }
 

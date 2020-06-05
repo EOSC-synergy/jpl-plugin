@@ -109,7 +109,6 @@ public class IndigoValidator extends Step {
             return doRun();
         }
 
-        @Override
         protected Set doRun() throws Exception {
             String yml = step.getYml();
             String schema = step.getSchema();
