@@ -3,6 +3,8 @@ package eu.indigo.compose.parser;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 import org.jenkinsci.plugins.workflow.steps.Step;
 import org.kohsuke.stapler.DataBoundConstructor;
 
