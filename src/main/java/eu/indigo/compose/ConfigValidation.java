@@ -20,6 +20,8 @@ import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
 import com.networknt.schema.JsonSchema;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Configuration validation for yaml provided file
  * @see: https://docs.docker.com/compose/compose-file/
