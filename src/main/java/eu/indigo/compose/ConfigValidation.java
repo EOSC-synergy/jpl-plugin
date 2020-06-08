@@ -2,6 +2,7 @@ package eu.indigo.compose.parser;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.LinkedHashSet;
 
 import org.jenkinsci.plugins.workflow.steps.Step;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
 import com.networknt.schema.JsonSchema;
+import com.networknt.schema.ValidationMessage;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -33,7 +35,7 @@ public class ConfigValidation implements Serializable {
 
     public ConfigValidation() {}
 
-    public Set validate(String yml, String schema) throws JsonProcessingException {
+    public Set<String> validate(String yml, String schema) throws JsonProcessingException {
 
         ObjectMapper objMapper = new ObjectMapper(new YAMLFactory());
 
@@ -41,8 +43,19 @@ public class ConfigValidation implements Serializable {
                 JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
                 .objectMapper(objMapper).build();
 
-        Set invalidMessages = factory.getSchema(schema)
+        Set<ValidationMessage> validationMessages = factory.getSchema(schema)
                 .validate(objMapper.readTree(yml));
+        
+        Set<String> invalidMessages;
+        if (validationMessages != null) {
+            invalidMessages = new LinkedHashSet<String>();
+            for (ValidationMessage validationMessage : validationMessages) {
+                invalidMessages.add(validationMessage.getMessage());
+            }
+        } else {
+            invalidMessages = null;
+        }
+        
         return invalidMessages;
     }
 
